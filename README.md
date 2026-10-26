@@ -1,8 +1,10 @@
 # Ambidextrous Moving Sofa Problem — Mathematical Optimization & Optimality Proof
 
-**Author:** Omar Mohammed  
+**Author:** Omar Mohammed (ORCID: [0009-0009-4017-0497](https://orcid.org/0009-0009-4017-0497))  
 **Repository:** [https://github.com/OmarMohammedSTEM/Ambidextrous-Sofa-Problem](https://github.com/OmarMohammedSTEM/Ambidextrous-Sofa-Problem)  
-**Status:** Complete Research Project (Papers I & II)
+**Preprints on Zenodo:**  
+* **Part I:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21195095.svg)](https://doi.org/10.5281/zenodo.21195095) (`doi:10.5281/zenodo.21195095`)
+* **Part II:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23664320.svg)](https://doi.org/10.5281/zenodo.23664320) (`doi:10.5281/zenodo.23664320`)
 
 ---
 
@@ -85,12 +87,16 @@ python anc/interval_bound.py
 @article{mohammed2026sofa1,
   title={An Independent Path-Space Optimization Attack on the Ambidextrous Moving Sofa Problem: Numerical evidence for the local optimality of Romik's sofa},
   author={Mohammed, Omar},
-  year={2026}
+  year={2026},
+  doi={10.5281/zenodo.21195095},
+  url={https://doi.org/10.5281/zenodo.21195095}
 }
 
 @article{mohammed2026sofa2,
   title={An Independent Path-Space Optimization Attack on the Ambidextrous Moving Sofa Problem (Part II): Non-Trivial Upper Bounds, Bilateral Conservation, and a Proof of Global Optimality},
   author={Mohammed, Omar},
-  year={2026}
+  year={2026},
+  doi={10.5281/zenodo.23664320},
+  url={https://doi.org/10.5281/zenodo.23664320}
 }
 ```

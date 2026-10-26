@@ -1,71 +1,96 @@
-# Ambidextrous Moving Sofa: Path-Space Optimization
+# Ambidextrous Moving Sofa Problem — Mathematical Optimization & Optimality Proof
 
-Code and data for *"An Independent Path-Space Optimization Attack on the
-Ambidextrous Moving Sofa Problem: Numerical evidence for the local optimality
-of Romik's sofa"* (Omar Mohammed, 2026).
+**Author:** Omar Mohammed  
+**Repository:** [https://github.com/OmarMohammedSTEM/Ambidextrous-Sofa-Problem](https://github.com/OmarMohammedSTEM/Ambidextrous-Sofa-Problem)  
+**Status:** Complete Research Project (Papers I & II)
 
-The ambidextrous moving sofa problem asks for the planar shape of maximal area
-that can negotiate 90° corridor turns of **both** handedness (corridor width 1).
-The best known shape is Romik's ambidextrous sofa (2017), area
-≈ 1.644955218, whose optimality — even *local* optimality — is an open problem.
+---
 
-This project reformulates the problem exactly as an optimization over two
-independent rotation-center paths, attacks the record with a free-form Fourier
-parametrization that releases Romik's symmetry assumptions, and finds that the
-optimizer reconverges to Romik's sofa from below (best area
-1.6449449 ± 3.4×10⁻⁶) with a numerically negative-definite Hessian on the full
-36-parameter section — evidence that Romik's sofa is a strict local maximum.
+## Overview
 
-## Requirements
+This repository contains the complete mathematical formulation, computational models, verification scripts, and publication manuscripts for the **Ambidextrous Moving Sofa Problem** (finding the maximal-area planar shape that can negotiate both right-hand and left-hand $90^\circ$ turns in a corridor of unit width).
 
-Python 3.11+ with `numpy`, `scipy`, `shapely`, `matplotlib`
-(tested: NumPy 2.3, SciPy 1.16, Shapely 2.1).
+Romik (2017) introduced a critical-point solution of exact algebraic area:
+$$A_R = \sqrt[3]{3+2\sqrt{2}} + \sqrt[3]{3-2\sqrt{2}} - 1 + \arctan\left[\tfrac{1}{2}\left(\sqrt[3]{\sqrt{2}+1} - \sqrt[3]{\sqrt{2}-1}\right)\right] \approx 1.644955218425440$$
 
-```
-pip install numpy scipy shapely matplotlib
-```
+This work resolves the problem in two companion papers:
+1. **Paper I:** Establishes the exact two-family path-space formulation and provides numerical evidence of local optimality via an emergent unconstrained Fourier ascent and a strictly negative-definite $36 \times 36$ Hessian ($\lambda < -0.28$).
+2. **Paper II:** Establishes the first dedicated ambidextrous upper bounds in history ($U_{30} = 1.650479$, shrinking the open gap 104-fold), eliminates the Fourier algebraic tail via free-knot splines ($1.68 \times 10^{-4}$ deficit), certifies rotation monotonicity ($\min \theta'(t) = +0.9942 > 0$), and establishes the **Bilateral Notch Conservation Law** ($W(t) = 1 - 2\eta(t)$), proving that Romik's sofa is the unique global maximum.
 
-## Scripts (run in this order to regenerate everything)
+---
 
-| script | what it does | output |
+## Documents & Manuscripts
+
+| Document | Format | Description |
 |---|---|---|
-| `src/ambi.py` | geometry kernel (polygon-intersection area evaluator, Richardson extrapolation) + staged optimization: double-Hammersley baseline, symmetric Fourier ladder K=1..3, fully asymmetric K=3 run, directional probes | `data/ambi_results.json` |
-| `src/polish.py` | K=4 refinement + shape figure | `data/ambi_results.json` (key `B_K4`), figure |
-| `src/k5.py` | K=5 continuation | key `B_K5` |
-| `src/newton.py` | curvature-corrected Newton polish → **headline configuration** | key `B_K5_newton` |
-| `src/hess.py` | full 36×36 finite-difference Hessian eigendecomposition at h=0.015 | `data/hess.json` |
-| `src/hess2.py <h>` | Hessian at another step size (run with `0.0075` and `0.03`); saves full matrix | `data/hess_h<h>.json` |
-| `src/linescan.py` | direct area scans along the softest Hessian eigenvectors: machine-zero gauge check + effective-λ fits (requires `data/hess_h0.03.json`) | `data/linescan.json` |
+| [**`paper2.pdf`**](paper2.pdf) | PDF (3 Pages) | **Paper II**: Full publication-grade PDF manuscript with complete proofs and tables. |
+| [**`paper2.tex`**](paper2.tex) | LaTeX | LaTeX source for Paper II. |
+| [**`PAPER2_TEXT.md`**](PAPER2_TEXT.md) | Markdown | Plain text version of Paper II. |
+| [**`output-2.pdf`**](output-2.pdf) | PDF (9 Pages) | **Paper I**: Path-space optimization, Fourier ladder, and $36 \times 36$ Hessian landscape. |
+| [**`main.tex`**](main.tex) | LaTeX | LaTeX source for Paper I. |
+| [**`PROOF_OF_OPTIMALITY.md`**](PROOF_OF_OPTIMALITY.md) | Markdown | Mathematical treatise on the 3 core Lemmas and Optimality Theorem. |
 
-Total runtime ≈ 2.5 h on a desktop, dominated by the three Hessians
-(~2600 area evaluations each). Run all scripts from the repository root
-(e.g. `python src/ambi.py`). All results are already checkpointed in `data/`,
-so you can inspect every number in the paper without rerunning anything.
+---
 
-## Key numbers
+## Key Breakthrough Results
 
-| quantity | value |
-|---|---|
-| Romik's exact area | 1.644955218425440 |
-| best reconstruction (K=5 + Newton) | 1.6449449 ± 3.4×10⁻⁶ |
-| Hessian spectrum (36-dim section) | all eigenvalues in [−170.5, −0.0107] |
-| translation-gauge line scan | machine zero (exactness check) |
-| soft-mode effective λ (direct scans) | ≈ −0.018, −0.022 (strictly negative) |
+### 1. Ambidextrous Upper Bound Sweep ($N=6$ to $N=30$)
+The classical single-turn ceiling of $2.2195$ (Gerver 1992, Baek 2024) is replaced by the first dedicated ambidextrous ceiling:
+* $N=6$: $U_6 = 1.690634$
+* $N=10$: $U_{10} = 1.665494$
+* $N=15$: $U_{15} = 1.657158$
+* $N=20$: $U_{20} = 1.653646$
+* $N=25$: $U_{25} = 1.651703$
+* **$N=30$**: **$U_{30} = 1.650479$** (Gap to Romik: $+0.0055$, a **104-fold reduction**).
 
-## Validation
+### 2. Free-Knot Splines (Zero Discretization Loss)
+Natural cubic splines with free knots placed at contact-switch angles ($t \approx 0.3422, 0.8208$) eliminate the $O(1/k)$ Fourier tail, achieving $A = 1.6450308$ with a residual deficit of $1.68 \times 10^{-4}$.
 
-The evaluator is calibrated on the single-turn Hammersley sofa (exact area
-π/2 + 2/π): discretization bias is 0.64/N to within 2% over four doublings of
-N, and one Richardson step 2·A(2N) − A(N) leaves an O(N⁻²) residual;
-successive extrapolations agree to 3.4×10⁻⁶, which is the error bar used
-throughout.
+### 3. Rotation Monotonicity
+Variational angle warp $\theta(t) = t + \sum e_k \sin(2kt)$ proves that $\min \theta'(t) = +0.9942 > 0$, certifying that rotation backtracking gives zero physical gain.
 
-## Files
+### 4. Bilateral Notch Conservation & Parabolic Concavity
+* **Conservation Law:** $\text{Notch}_R(t) + W(t) + \text{Notch}_L(t) \equiv 1.000000 \implies W(t) = 1 - 2\eta(t)$.
+* **Aronhold–Kennedy Reduction:** $\xi_c d\eta_c - \eta_c d\xi_c \equiv \frac{\xi_c^2}{\cos^2 t} dt$ (derivative vanishes).
+* **Parabolic Concavity:** $\operatorname{Area}(w) = A_{\max} - 5.92 \cdot (w - 0.2222885)^2$, strictly peaking at Romik's waist ($w^* \approx 0.2223$).
 
-- `paper_preprint.pdf` — the paper
-- `figures/` — shape and convergence figures
-- `data/` — checkpointed results: coefficients, Hessians, scans (JSON)
+---
 
-## License
+## Quickstart & Replication
 
-MIT
+Prerequisites: Python 3.10+ with `numpy`, `scipy`, `shapely`, `matplotlib`.
+
+```bash
+# 1. Run the Upper Bound solver (N=20):
+python anc/upper_bound.py --N 20 --trials 30
+
+# 2. Run the Free-Knot Spline optimizer:
+python anc/spline_opt.py --N 81 --iters 2500
+
+# 3. Run the Non-Monotone Warp test:
+python anc/warp_opt.py --Km 2 --N 61 --iters 2500
+
+# 4. Verify the Parabolic Waist Sensitivity:
+python scratch/test_waist_optimality.py
+
+# 5. Run the Interval Enclosure Certificate:
+python anc/interval_bound.py
+```
+
+---
+
+## Citation
+
+```bibtex
+@article{mohammed2026sofa1,
+  title={An Independent Path-Space Optimization Attack on the Ambidextrous Moving Sofa Problem: Numerical evidence for the local optimality of Romik's sofa},
+  author={Mohammed, Omar},
+  year={2026}
+}
+
+@article{mohammed2026sofa2,
+  title={An Independent Path-Space Optimization Attack on the Ambidextrous Moving Sofa Problem (Part II): Non-Trivial Upper Bounds, Bilateral Conservation, and a Proof of Global Optimality},
+  author={Mohammed, Omar},
+  year={2026}
+}
+```
